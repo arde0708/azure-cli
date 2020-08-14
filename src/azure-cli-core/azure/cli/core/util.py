@@ -132,32 +132,37 @@ def get_installed_cli_distributions():
     return [d for d in list(working_set) if d.key == CLI_PACKAGE_NAME or d.key.startswith(COMPONENT_PREFIX)]
 
 
-def _update_latest_from_pypi(versions):
-    from subprocess import check_output, STDOUT, CalledProcessError
-
-    success = False
-
-    if not check_connectivity(max_retries=0):
-        return versions, success
-
+def get_latest_from_github(package_path='azure-cli'):
     try:
-        cmd = [sys.executable] + \
-            '-m pip search azure-cli -vv --disable-pip-version-check --no-cache-dir --retries 0'.split()
-        logger.debug('Running: %s', cmd)
-        log_output = check_output(cmd, stderr=STDOUT, universal_newlines=True)
-        success = True
-        for line in log_output.splitlines():
-            if not line.startswith(CLI_PACKAGE_NAME):
-                continue
-            comps = line.split()
-            mod = comps[0].replace(COMPONENT_PREFIX, '') or CLI_PACKAGE_NAME
-            version = comps[1].replace('(', '').replace(')', '')
-            try:
-                versions[mod]['pypi'] = version
-            except KeyError:
-                pass
-    except CalledProcessError:
-        pass
+        import requests
+        git_url = "https://raw.githubusercontent.com/Azure/azure-cli/master/src/{}/setup.py".format(package_path)
+        response = requests.get(git_url, timeout=10)
+        if response.status_code != 200:
+            logger.info("Failed to fetch the latest version from '%s' with status code '%s' and reason '%s'",
+                        git_url, response.status_code, response.reason)
+            return None
+        for line in response.iter_lines():
+            txt = line.decode('utf-8', errors='ignore')
+            if txt.startswith('VERSION'):
+                match = re.search(r'VERSION = \"(.*)\"$', txt)
+                if match:
+                    return match.group(1)
+    except Exception as ex:  # pylint: disable=broad-except
+        logger.info("Failed to get the latest version from '%s'. %s", git_url, str(ex))
+        return None
+
+
+def _update_latest_from_github(versions):
+    if not check_connectivity(max_retries=0):
+        return versions, False
+    success = True
+    for pkg in ['azure-cli-core', 'azure-cli-telemetry']:
+        version = get_latest_from_github(pkg)
+        if not version:
+            success = False
+        else:
+            versions[pkg.replace(COMPONENT_PREFIX, '')]['pypi'] = version
+    versions[CLI_PACKAGE_NAME]['pypi'] = versions['core']['pypi']
     return versions, success
 
 
@@ -176,7 +181,7 @@ def get_cached_latest_versions(versions=None):
             if cache_versions and cache_versions['azure-cli']['local'] == versions['azure-cli']['local']:
                 return cache_versions.copy(), True
 
-    versions, success = _update_latest_from_pypi(versions)
+    versions, success = _update_latest_from_github(versions)
     if success:
         VERSIONS['versions'] = versions
         VERSIONS[_VERSION_UPDATE_TIME] = str(datetime.datetime.now())
@@ -202,7 +207,7 @@ def get_az_version_string(use_cache=False):  # pylint: disable=too-many-statemen
     versions = _get_local_versions()
 
     # get the versions from pypi
-    versions, success = get_cached_latest_versions(versions) if use_cache else _update_latest_from_pypi(versions)
+    versions, success = get_cached_latest_versions(versions) if use_cache else _update_latest_from_github(versions)
     updates_available = 0
 
     def _print(val=''):
