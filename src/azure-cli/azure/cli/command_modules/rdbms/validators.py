@@ -3,8 +3,6 @@
 # Licensed under the MIT License. See License.txt in the project root for license information.
 # --------------------------------------------------------------------------------------------
 
-import uuid
-from six.moves import configparser
 from azure.cli.core.commands.client_factory import get_mgmt_service_client
 
 from azure.cli.core.commands.validators import (
@@ -14,8 +12,6 @@ from azure.cli.core.util import parse_proxy_resource_id
 
 from knack.prompting import prompt_pass, NoTTYException
 from knack.util import CLIError
-from .randomname.generate import generate_username
-from ._util import get_config_value, set_config_value
 
 
 def _get_resource_group_from_server_name(cli_ctx, server_name):
@@ -118,28 +114,3 @@ def validate_private_endpoint_connection_id(cmd, namespace):
         raise CLIError('incorrect usage: [--id ID | --name NAME --server-name NAME]')
 
     del namespace.connection_id
-
-
-def namespace_processor(db_type):
-    return lambda cmd, namespace: _process_namespace(cmd, namespace, db_type=db_type)
-
-
-def _process_namespace(cmd, namespace, db_type=None):
-    _set_value(db_type, namespace, 'administrator_login', 'login', default=generate_username())
-    if namespace.generate_password:
-        namespace.administrator_login_password = str(uuid.uuid4())
-    del namespace.generate_password
-
-
-def _set_value(db_type, namespace, attribute, option, default=None, cache=True):
-    if getattr(namespace, attribute) is None:
-        try:
-            if get_config_value(db_type, option):
-                setattr(namespace, attribute, get_config_value(db_type, option))
-            else:
-                setattr(namespace, attribute, default)
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            if default is not None:
-                setattr(namespace, attribute, default)
-    if cache:
-        set_config_value(db_type, option, getattr(namespace, attribute))

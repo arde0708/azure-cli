@@ -43,9 +43,6 @@ from azure.cli.command_modules.rdbms._client_factory import (
     cf_postgres_server_ad_administrators_operations,
     cf_postgres_flexible_servers)
 
-from .validators import namespace_processor
-
-
 # pylint: disable=too-many-locals, too-many-statements, line-too-long
 def load_command_table(self, _):
 
@@ -462,4 +459,4 @@ def load_command_table(self, _):
     flexible_server_definitions = CliCommandType(operations_tmpl='azure.cli.command_modules.rdbms.flexible_servers_custom#{}')
 
     with self.command_group('postgres flexible-server', custom_command_type=flexible_server_definitions, client_factory=cf_postgres_flexible_servers) as g:
-        g.custom_command('create', '_flexible_server_create')#, validator=namespace_processor('postgres'))
+        g.custom_command('create', '_flexible_server_create')
