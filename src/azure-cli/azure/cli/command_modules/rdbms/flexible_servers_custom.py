@@ -46,9 +46,12 @@ def _flexible_server_create(cmd, client, resource_group_name=None, server_name=N
 
     user = '{}@{}'.format(administrator_login, server_name)
     host = server_result.fully_qualified_domain_name
+    sku = '{}'.format(sku_name)
+    rg = '{}'.format(resource_group_name)
+    loc = '{}'.format(location)
 
     return _form_response(
-        host, user, sku_name, location, resource_group_name,
+        host, user, sku, loc, rg,
         administrator_login_password if administrator_login_password is not None else '*****',
         _create_postgresql_connection_string(host, administrator_login_password)
     )
@@ -59,6 +62,12 @@ def _create_server(db_context, cmd, resource_group_name, server_name, location, 
                    ssl_enforcement, tags, public_network_access, infrastructure_encryption, assign_identity):
     logging_name, azure_sdk, server_client = db_context.logging_name, db_context.azure_sdk, db_context.server_client
     logger.warning('Creating %s Server \'%s\' in group \'%s\'...', logging_name, server_name, resource_group_name)
+
+    logger.warning('Make a note of your password. If you forget, you would have to'
+                   ' reset your password with CLI command for reset password')
+
+    logger.warning('Your server \'%s\' is using sku \'%s\' (Paid Tier). '
+                   'Please refer to LINK for pricing details', server_name, sku_name)
 
     from azure.mgmt.rdbms import postgresql
 
@@ -97,15 +106,15 @@ def _create_postgresql_connection_string(host, password):
     return 'postgres://postgres:{password}@{host}/postgres?sslmode=require'.format(**connection_kwargs)
 
 
-def _form_response(host, username, skuname, location, resource_group_name, password, connection_string):
+def _form_response(host, username, sku, location, resource_group_name, password, connection_string):
     return {
         'connection string': connection_string,
         'host': host,
         'username': username,
         'password': password,
-        'skuname': skuname,
+        'skuname': sku,
         'location': location,
-        'resource group': resource_group_name,
+        'resource group': (resource_group_name),
     }
 
 
