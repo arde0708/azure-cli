@@ -82,7 +82,7 @@ def _create_server(db_context, cmd, resource_group_name, server_name, location, 
         infrastructure_encryption=infrastructure_encryption,
         storage_profile=postgresql.flexibleservers.models.StorageProfile(
             backup_retention_days=backup_retention,
-            # geo_redundant_backup=geo_redundant_backup,
+            geo_redundant_backup=geo_redundant_backup,
             storage_mb=storage_mb),  ##!!! required I think otherwise data is null error seen in backend exceptions
         # storage_autogrow=auto_grow),
         location=location,

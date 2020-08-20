@@ -1174,3 +1174,19 @@ examples:
   - name: Place the CLI in a waiting state until a creation of Active Directory Administrator in server testsvr.
     text: az postgres server ad-admin wait --server-name testsvr -g testgroup --created
 """
+
+helps['postgres flexible-server create'] = """
+type: command
+short-summary: Create a new generation server.
+examples:
+  - name: Create a new generation PostgreSQL server in North Europe with sku GP_Gen5_2 (General Purpose, Gen 5 hardware, 2 vCores).
+    text: |
+        az postgres flexible-server create -l northeurope -g testgroup -n testsvr -u username -p password \\
+            --sku-name GP_Gen5_2
+  - name: Create a PostgreSQL server with all paramaters set.
+    text: |
+        az postgres flexible-server create -l northeurope -g testgroup -n testsvr -u username -p password \\
+            --sku-name B_Gen5_1 --ssl-enforcement Enabled --minimal-tls-version TLS1_0 --public-network-access Disabled \\
+            --backup-retention 10 --geo-redundant-backup Enabled --storage-size 51200 \\
+            --tags "key=value" --version 11.0
+"""
