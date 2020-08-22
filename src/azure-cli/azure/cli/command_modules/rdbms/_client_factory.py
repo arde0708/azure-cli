@@ -4,6 +4,7 @@
 # --------------------------------------------------------------------------------------------
 
 from azure.cli.core.commands.client_factory import get_mgmt_service_client
+from azure.cli.core.profiles import ResourceType
 
 # CLIENT FACTORIES
 
@@ -252,3 +253,7 @@ def cf_postgres_server_ad_administrators_operations(cli_ctx, _):
 
 def cf_postgres_flexible_servers(cli_ctx, _):
     return get_postgresql_flexible_management_client(cli_ctx).servers
+
+
+def resource_client_factory(cli_ctx, **_):
+    return get_mgmt_service_client(cli_ctx, ResourceType.MGMT_RESOURCE_RESOURCES)

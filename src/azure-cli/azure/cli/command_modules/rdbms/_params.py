@@ -12,8 +12,6 @@ from azure.cli.core.commands.parameters import (
     get_three_state_flag)
 from azure.cli.command_modules.rdbms.validators import configuration_value_validator, validate_subnet, retention_validator, tls_validator
 from azure.cli.core.commands.validators import get_default_location_from_resource_group
-from ._util import create_random_resource_name
-from .randomname.generate import generate_username
 
 
 def load_arguments(self, _):    # pylint: disable=too-many-statements
@@ -33,9 +31,8 @@ def load_arguments(self, _):    # pylint: disable=too-many-statements
                            help='The max storage size of the server. Unit is megabytes.')
                 c.argument('sku_name', options_list=['--sku-name'], default='Standard_D4s_v3',
                            help='The name of the sku, typically, tier + family + cores, e.g. B_Gen4_1, GP_Gen5_8.')
-                c.argument('server_name', options_list=['--server-name', '-s'],
-                           default=create_random_resource_name('server'), help='Name of the server.')
-                c.argument('administrator_login', default=generate_username(), help='Name of the server.', arg_group='Authentication')
+                c.argument('server_name', options_list=['--server-name', '-s'], help='Name of the server.')
+                c.argument('administrator_login', help='Name of the server.', arg_group='Authentication')
                 c.argument('administrator_login_password', options_list=['--admin-password', '-p'],
                            help='The password of the administrator. Minimum 8 characters and maximum 128 characters. Password must contain characters from three of the following categories: English uppercase letters, English lowercase letters, numbers, and non-alphanumeric characters.',
                            arg_group='Authentication')
