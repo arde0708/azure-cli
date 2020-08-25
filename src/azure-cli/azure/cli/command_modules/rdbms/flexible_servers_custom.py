@@ -11,7 +11,6 @@ from ._client_factory import cf_postgres_firewall_rules, cf_postgres_db, cf_post
 from azure.mgmt.resource.resources.models import ResourceGroup
 from ._client_factory import resource_client_factory
 from ._util import create_random_resource_name
-from .randomname.generate import generate_username
 
 
 SKU_TIER_MAP = {'Basic': 'b', 'GeneralPurpose': 'gp', 'MemoryOptimized': 'mo'}
@@ -56,8 +55,6 @@ def _flexible_server_create(cmd, client, resource_group_name=None, server_name=N
         logger.warning('Found existing PostgreSQL Server \'%s\' in group \'%s\'',
                        server_name, resource_group_name)
 
-        if administrator_login is None:
-            administrator_login = generate_username()
         # update server if needed once we have it like sterling
         '''
         server_result = _update_server(
