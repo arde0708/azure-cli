@@ -16,7 +16,7 @@ from .validators import get_default_location_from_resource_group
 
 logger = get_logger(__name__)
 
-DEFAULT_LOCATION = 'eastus2'
+DEFAULT_LOCATION = 'northeurope'
 
 
 class RdbmsArgumentContext(AzArgumentContext):  # pylint: disable=too-few-public-methods

@@ -41,7 +41,10 @@ from azure.cli.command_modules.rdbms._client_factory import (
     cf_postgres_private_link_resources_operations,
     cf_postgres_server_keys_operations,
     cf_postgres_server_ad_administrators_operations,
-    cf_postgres_flexible_servers)
+    cf_postgres_flexible_servers,
+    cf_mysql_flexible_servers)
+
+from ._transformers import table_transform_connection_string
 
 # pylint: disable=too-many-locals, too-many-statements, line-too-long
 def load_command_table(self, _):
@@ -457,6 +460,11 @@ def load_command_table(self, _):
         g.wait_command('wait')
 
     flexible_server_definitions = CliCommandType(operations_tmpl='azure.cli.command_modules.rdbms.flexible_servers_custom#{}')
+    flexible_server_definitions_mysql = CliCommandType(
+        operations_tmpl='azure.cli.command_modules.rdbms.flexible_servers_custom_mysql#{}')
 
     with self.command_group('postgres flexible-server', custom_command_type=flexible_server_definitions, client_factory=cf_postgres_flexible_servers) as g:
         g.custom_command('create', '_flexible_server_create')
+
+    with self.command_group('mysql flexible-server', custom_command_type=flexible_server_definitions_mysql, client_factory=cf_mysql_flexible_servers) as g:
+        g.custom_command('create', '_flexible_server_create', table_transformer=table_transform_connection_string)
