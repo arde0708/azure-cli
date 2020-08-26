@@ -37,20 +37,29 @@ def _flexible_server_create(cmd, client, resource_group_name=None, server_name=N
             db_context, cmd, resource_group_name, server_name, location, backup_retention,
             sku_name, storage_mb, administrator_login, administrator_login_password, version,
             tags, public_network_access, assign_identity, tier, subnet_name, vnet_name)
-
+    """
     user = '{}@{}'.format(administrator_login, server_name)
     host = server_result.fully_qualified_domain_name
     sku = '{}'.format(sku_name)
     rg = '{}'.format(resource_group_name)
     loc = '{}'.format(location)
+    """
+    rg = '{}'.format(resource_group_name)
+    user = server_result.administrator_login
+    id = server_result.id
+    loc = server_result.location
+    host = server_result.fully_qualified_domain_name
+    vsion = server_result.version
+    sku = server_result.sku.name
 
-    #rg = server_result
+    logger.warning('Make a note of your password. If you forget, you would have to'
+                   ' reset your password with CLI command for reset password')
+
     cmd.cli_ctx.invocation.data['output'] = 'table'
 
     return _form_response(
-        host, user, sku, loc, rg,
-        administrator_login_password if administrator_login_password is not None else '*****',
-        _create_postgresql_connection_string(host, administrator_login_password)
+    user, sku, loc, rg, id, host,vsion,
+        administrator_login_password if administrator_login_password is not None else '*****'
     )
 
 
@@ -60,9 +69,6 @@ def _create_server(db_context, cmd, resource_group_name, server_name, location, 
 
     logging_name, azure_sdk, server_client = db_context.logging_name, db_context.azure_sdk, db_context.server_client
     logger.warning('Creating %s Server \'%s\' in group \'%s\'...', logging_name, server_name, resource_group_name)
-
-    logger.warning('Make a note of your password. If you forget, you would have to'
-                   ' reset your password with CLI command for reset password')
 
     logger.warning('Your server \'%s\' is using sku \'%s\' (Paid Tier). '
                    'Please refer to https://aka.ms/mysql-pricing for pricing details', server_name, sku_name)
@@ -101,26 +107,17 @@ def _create_server(db_context, cmd, resource_group_name, server_name, location, 
         '{} Server Create'.format(logging_name))
 
 
-def _create_postgresql_connection_string(host, password):
-    connection_kwargs = {
-        'host': host,
-        'password': password if password is not None else '{password}'
-    }
-    return 'postgres://postgres:{password}@{host}/postgres?sslmode=require'.format(**connection_kwargs)
-
-
-def _form_response(host, username, sku, location, resource_group_name, password, connection_string):
+def _form_response(username, sku, location, resource_group_name, id, host, version, password):
     return {
-        'connection string': connection_string,
         'host': host,
         'username': username,
         'password': password,
         'skuname': sku,
         'location': location,
-        'resource group': (resource_group_name),
+        'resource group': resource_group_name,
+        'id': id,
+        'version': version
     }
-
-
 
 # pylint: disable=too-many-instance-attributes,too-few-public-methods
 class DbContext:

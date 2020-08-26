@@ -8,17 +8,10 @@ from collections import OrderedDict
 
 def table_transform_connection_string(result):
     table_result = []
-    for key in ('host', 'username', 'password', 'location'):
+    for key in ('host', 'username', 'password', 'location', 'skuname', 'resource group', 'id', 'version'):
         entry = OrderedDict()
         entry['Property'] = key
         entry['Value'] = result[key]
         table_result.append(entry)
 
-    """connection_strings = result['connectionStrings']
-    for key in sorted(connection_strings.keys()):
-        entry = OrderedDict()
-        entry['Property'] = key
-        entry['Value'] = connection_strings[key]
-        table_result.append(entry)
-    """
     return table_result
