@@ -326,3 +326,7 @@ def resource_client_factory(cli_ctx, **_):
 def network_client_factory(cli_ctx):
     from azure.mgmt.network import NetworkManagementClient
     return get_mgmt_service_client(cli_ctx, NetworkManagementClient, api_version="2018-08-01")
+
+
+def cf_postgres_check_resource_availability(cli_ctx, _):
+    return get_postgresql_flexible_management_client(cli_ctx).check_name_availability

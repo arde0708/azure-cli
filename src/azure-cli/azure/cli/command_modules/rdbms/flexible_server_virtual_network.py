@@ -38,11 +38,17 @@ def prepare_vnet(cmd, server_name, vnet, subnet, resource_group_name, loc, deleg
             resource_client = resource_client_factory(cmd.cli_ctx)
             rg = resource_client.resource_groups.get(resource_group)
             location = rg.location
-            validate_rg_loc_sub(resource_group, subscription, location, resource_group_name,
-                                get_subscription_id(cmd.cli_ctx), loc)
-            subnet_result = check_resource_existence(cmd, subnet_name, vnet_name, resource_group_name)
+            # Special case : If subnet Id is passed which contains a RG different from the
+            # RG in which the server is created, then allow it. Just validate that it is in the same sub
+            if not get_subscription_id(cmd.cli_ctx) == subscription:
+                raise CLIError("Incorrect Usage : The subscription of the server,Vnet and Subnet should be same.")
+            subnet_result = check_resource_existence(cmd, subnet_name, vnet_name, resource_group)
+            # If the subnet does not exist in the RG as in the subnet Id, don't just yet conclude that the subnet
+            # does not exist. Check its existence of the subnet in the RG of the server.
+            if not subnet_result:
+                subnet_result = check_resource_existence(cmd, subnet_name, vnet_name, resource_group_name)
             if subnet_result:
-                logger.info('Using existing subnet "%s" in resource group "%s"', subnet_result.name, resource_group)
+                logger.info('Using existing subnet "%s"...', subnet_result.name)
 
                 if not subnet_result.delegations:
                     logger.info('Adding "%s" delegation to the existing subnet.', )
