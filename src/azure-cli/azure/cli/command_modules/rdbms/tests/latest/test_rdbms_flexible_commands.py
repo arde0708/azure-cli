@@ -87,6 +87,11 @@ class FlexibleServerMgmtScenarioTest(ScenarioTest):
                  .format(database_engine, resource_group, server_name, location, admin_user, sku_name,
                          version, storage_size, backup_retention, tier, high_availability, tags))
 
+        # Returns an error if a server
+        self.cmd('{} flexible-server create -g {} -n {}'
+                 .format(database_engine, resource_group, server_name, location, admin_user, sku_name,
+                         version, storage_size, backup_retention, tier, high_availability, tags))
+
         # flexible-server show
         self.cmd('{} flexible-server show -g {} -n {}'.format(database_engine, resource_group, server_name), checks=list_checks)
 

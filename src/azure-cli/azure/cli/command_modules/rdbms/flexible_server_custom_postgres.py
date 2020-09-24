@@ -64,7 +64,7 @@ def flexible_server_create(cmd, client,
             server_availability = check_name_client.execute(server_name, DELEGATION_SERVICE_NAME)
             if not server_availability.name_available:
                 raise CLIError("The server name '{}' already exists.Please re-run command with a "
-                               + "valid server name.".format(server_name))
+                               "valid server name.".format(server_name))
 
         # Populate desired parameters
         location, resource_group_name, server_name = generate_missing_parameters(cmd, location, resource_group_name,
@@ -117,7 +117,7 @@ def flexible_server_create(cmd, client,
 
         return _form_response(user, sku, loc, server_id, host, version,
                               administrator_login_password if administrator_login_password is not None else '*****',
-                              _create_postgresql_connection_string(host, administrator_login_password), firewall_id,
+                              _create_postgresql_connection_string(host, user, administrator_login_password), firewall_id,
                               subnet_id)
     except Exception as ex:  # pylint: disable=broad-except
         logger.error(ex)
@@ -325,7 +325,7 @@ def flexible_server_connection_string(
 
 def _create_postgresql_connection_strings(host, user, password, database):
     result = {
-        'psql_cmd': "psql --host={host} --port=5432 --username={user} --dbname=postgres",
+        'psql_cmd': "postgresql://{user}:{password}@{host}/postgres?sslmode=require",
         'ado.net': "Server={host};Database=postgres;Port=5432;User Id={user};Password={password};",
         'jdbc': "jdbc:postgresql://{host}:5432/postgres?user={user}&password={password}",
         'jdbc Spring': "spring.datasource.url=jdbc:postgresql://{host}:5432/postgres  "
@@ -351,12 +351,13 @@ def _create_postgresql_connection_strings(host, user, password, database):
     return result
 
 
-def _create_postgresql_connection_string(host, password):
+def _create_postgresql_connection_string(host, user, password):
     connection_kwargs = {
+        'user': user,
         'host': host,
         'password': password if password is not None else '{password}'
     }
-    return 'postgres://postgres:{password}@{host}/postgres?sslmode=require'.format(**connection_kwargs)
+    return 'postgresql://{user}:{password}@{host}/postgres?sslmode=require'.format(**connection_kwargs)
 
 
 def _form_response(username, sku, location, server_id, host, version, password, connection_string, firewall_id=None,

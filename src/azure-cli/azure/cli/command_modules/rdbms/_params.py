@@ -252,8 +252,8 @@ def load_arguments(self, _):    # pylint: disable=too-many-statements
                            help='Availability zone into which to provision the resource.')
 
             c.argument('vnet_resource_id', options_list=['--vnet'], help='The virtual network name.')
-            c.argument('vnet_address_prefix', options_list=['--address-prefixes'], help='The virtual network address prefix.')
-            c.argument('subnet_address_prefix', options_list=['--subnet-prefixes'], help='The subnet address prefix.')
+            c.argument('vnet_address_prefix', options_list=['--vnet-address-prefix'], help='The virtual network address prefix.')
+            c.argument('subnet_address_prefix', options_list=['--subnet-address-prefix'], help='The subnet address prefix.')
             c.argument('subnet_arm_resource_id', options_list=['--subnet'],
                        help='Name or ID of the subnet that allows access to an Azure Flexible Server. ')
             c.argument('server_name', options_list=['--name', '-n'], arg_type=server_name_setter_arg_type)
@@ -285,7 +285,7 @@ def load_arguments(self, _):    # pylint: disable=too-many-statements
                        help='The name of the new server that is created by the restore command.')
             c.argument('source_server', options_list=['--source-server'],
                        help='The name or resource ID of the source server to restore from.')
-            c.argument('restore_point_in_time', options_list=['--time'],
+            c.argument('restore_point_in_time', options_list=['--point-in-time'],
                        help='The point in time to restore from (ISO8601 format), e.g., 2017-04-26T02:10:00+08:00')
 
         with self.argument_context('{} flexible-server update'.format(command_group)) as c:

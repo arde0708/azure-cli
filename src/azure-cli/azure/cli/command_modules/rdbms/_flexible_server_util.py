@@ -62,7 +62,7 @@ def generate_password(administrator_login_password):
     import secrets
     if administrator_login_password is None:
         passwordLength = 16
-        special_character = random.choice('!@#,?;:$&*')
+        special_character = random.choice('@#,?;:$&*')
         administrator_login_password = secrets.token_urlsafe(passwordLength)
         random_position = random.randint(1, len(administrator_login_password) - 1)
         administrator_login_password = administrator_login_password[
