@@ -95,18 +95,14 @@ def flexible_server_create(cmd, client, resource_group_name=None, server_name=No
         # calculate IOPS
         default_iops = 100
         max_supported_iops = iops_info[tier][sku_name]
-        storage_iops = storage_mb * 3
+        free_storage_iops = storage_mb * 3
         if iops is not None:
-            if iops < default_iops and storage_iops < default_iops:
+            if iops <= default_iops and free_storage_iops <= default_iops:
                 iops = default_iops
-                logger.warning('The min IOPS for your sku is {}. Provisioning it with {}...'.format(default_iops, default_iops))
-            elif iops > max_supported_iops or storage_iops > max_supported_iops:
-                iops = min(storage_iops, max_supported_iops)
+                logger.warning('The min IOPS is {}. Provisioning it with {}...'.format(default_iops, default_iops))
+            elif iops > max_supported_iops:
+                iops = min(free_storage_iops, max_supported_iops)
                 logger.warning('The max IOPS for your sku is {}. Provisioning it with {}...'.format(iops, iops))
-            elif default_iops <= iops <= storage_iops:
-                iops = storage_iops
-                logger.warning('The min IOPS for your sku is {}. Provisioning it with {}...'.format(storage_iops, storage_iops))
-
 
         if server_result is None:
             # Create mysql server
@@ -209,6 +205,46 @@ def flexible_server_update_custom_func(cmd, instance,
     server_module_path = instance.__module__
     module = import_module(server_module_path)  # replacement not needed for update in flex servers
     ServerForUpdate = getattr(module, 'ServerForUpdate')
+
+    if iops:
+        tier_rank = {'Burstable': 1, 'GeneralPurpose': 2, 'MemoryOptimized': 3}
+
+        sku_rank = {'Standard_B1s': 1, 'Standard_B1ms': 2, 'Standard_B2s': 3, 'Standard_D2ds_v4': 4, 'Standard_D4ds_v4': 5, 'Standard_D8ds_v4': 6,
+                    'Standard_D16ds_v4': 7, 'Standard_D32ds_v4': 8, 'Standard_D48ds_v4': 9, 'Standard_D64ds_v4': 10, 'Standard_E2ds_v4': 11,
+                    'Standard_E4ds_v4': 12, 'Standard_E8ds_v4': 13, 'Standard_E16ds_v4': 14, 'Standard_E32ds_v4': 15, 'Standard_E48ds_v4': 16,
+                    'Standard_E64ds_v4': 17}
+
+        '''
+        burstable_sku_rank = {'Standard_B1s' : 1, 'Standard_B1ms': 2, 'Standard_B2s': 3}
+        general_purpose_sku_rank = {'Standard_D2ds_v4': 1, 'Standard_D4ds_v4': 2, 'Standard_D8ds_v4': 3, 'Standard_D16ds_v4': 4, 'Standard_D32ds_v4': 5, 'Standard_D48ds_v4': 6, 'Standard_D64ds_v4': 7}
+        memory_optimized_sku_rank = {'Standard_E2ds_v4': 1, 'Standard_E4ds_v4': 2, 'Standard_E8ds_v4': 3, 'Standard_E16ds_v4': 4, 'Standard_E32ds_v4': 5, 'Standard_E48ds_v4': 6, 'Standard_E64ds_v4': 7}
+        '''
+        if tier is not None and sku_name is not None:
+            new_sku_rank = sku_rank[sku_name]
+            old_sku_rank = sku_rank[instance.sku.name]
+
+            if new_sku_rank < old_sku_rank:
+                supplied_iops = iops
+                max_allowed_iops = iops_info[tier][sku_name]
+                if supplied_iops> max_allowed_iops:
+                    iops = max_allowed_iops
+                    logger.warning('The allowed IOPS for your new SKU is : {}'.format(max_allowed_iops))
+            else:
+                supplied_iops = iops
+                max_allowed_iops = iops_info[tier][sku_name]
+                if storage_mb is None:
+                    free_iops_for_old_sku = instance.storage_profile.storage_mb * 3
+                else:
+                    free_iops_for_old_sku = storage_mb * 3
+                if free_iops_for_old_sku <= max_allowed_iops and supplied_iops <= max_allowed_iops:
+                    iops = max(free_iops_for_old_sku, supplied_iops)
+                else:
+                    iops =
+
+
+
+
+
 
     if sku_name:
         instance.sku.name = sku_name
