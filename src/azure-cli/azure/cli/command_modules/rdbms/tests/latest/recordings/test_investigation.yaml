@@ -1,0 +1,52 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      CommandName:
+      - mysql flexible-server create
+      Connection:
+      - keep-alive
+      ParameterSetName:
+      - -g -n --subnet
+      User-Agent:
+      - python/3.7.4 (Windows-10-10.0.19041-SP0) msrest/0.6.18 msrest_azure/0.6.3
+        azure-mgmt-rdbms/2020-07-01-privatepreview Azure-SDK-For-Python AZURECLI/2.14.0
+      accept-language:
+      - en-US
+    method: GET
+    uri: https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.DBForMySql/locations/eastus2euap/capabilities?api-version=2020-07-01-preview
+  response:
+    body:
+      string: '{"error":{"code":"NoRegisteredProviderFound","message":"No registered
+        resource provider found for location ''eastus2euap'' and API version ''2020-07-01-preview''
+        for type ''locations/capabilities''. The supported api-versions are ''2020-07-01-privatepreview,
+        2020-07-01-preview''. The supported locations are ''eastus2, westus2, brazilsouth,
+        southeastasia, northeurope, australiaeast, japaneast, koreacentral, uksouth,
+        westeurope, canadacentral, centralus, eastus''."}}'
+    headers:
+      cache-control:
+      - no-cache
+      content-length:
+      - '459'
+      content-type:
+      - application/json; charset=utf-8
+      date:
+      - Thu, 05 Nov 2020 01:38:21 GMT
+      expires:
+      - '-1'
+      pragma:
+      - no-cache
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+      x-ms-failure-cause:
+      - gateway
+    status:
+      code: 400
+      message: Bad Request
+version: 1
