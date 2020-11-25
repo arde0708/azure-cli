@@ -202,6 +202,7 @@ class FlexibleServerProxyResourceMgmtScenarioTest(ScenarioTest):
     def test_postgres_flexible_server_proxy_resource(self, resource_group, server):
         self._test_firewall_rule_mgmt('postgres', resource_group, server)
         self._test_parameter_mgmt('postgres', resource_group, server)
+        self._test_database_mgmt('postgres', resource_group, server)
 
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=mysql_location)

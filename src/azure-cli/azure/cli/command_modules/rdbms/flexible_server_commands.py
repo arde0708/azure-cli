@@ -15,6 +15,7 @@ from azure.cli.command_modules.rdbms._client_factory import (
     cf_postgres_flexible_servers,
     cf_postgres_flexible_firewall_rules,
     cf_postgres_flexible_config,
+    cf_postgres_flexible_db,
     cf_postgres_flexible_location_capabilities)
 
 from ._transformers import (
@@ -74,6 +75,11 @@ def load_flexibleserver_command_table(self, _):
         client_factory=cf_postgres_flexible_config
     )
 
+    postgres_flexible_db_sdk = CliCommandType(
+        operations_tmpl='azure.mgmt.rdbms.postgresql_flexibleservers.operations#DatabasesOperations.{}',
+        client_factory=cf_postgres_flexible_db
+    )
+
     postgres_flexible_location_capabilities_sdk = CliCommandType(
         operations_tmpl='azure.mgmt.rdbms..postgresql_flexibleservers.operations#LocationBasedCapabilitiesOperations.{}',
         client_factory=cf_postgres_flexible_location_capabilities
@@ -127,6 +133,13 @@ def load_flexibleserver_command_table(self, _):
                             client_factory=cf_postgres_flexible_config,
                             is_preview=True) as g:
         g.custom_command('set', 'flexible_parameter_update')
+        g.show_command('show', 'get')
+        g.command('list', 'list_by_server')
+
+    with self.command_group('postgres flexible-server db', postgres_flexible_db_sdk,
+                            is_preview=True) as g:
+        g.command('create', 'create')
+        g.custom_command('delete', 'database_delete_func', custom_command_type=flexible_server_custom_common, client_factory=cf_postgres_flexible_db)
         g.show_command('show', 'get')
         g.command('list', 'list_by_server')
 
