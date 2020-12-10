@@ -62,7 +62,7 @@ class ServerPreparer(AbstractPreparer, SingleValueReplacer):
     def _get_resource_group(self, **kwargs):
         return kwargs.get(self.resource_group_parameter_name)
 
-
+'''
 class FlexibleServerMgmtScenarioTest(ScenarioTest):
 
     postgres_location = 'southeastasia'
@@ -196,7 +196,7 @@ class FlexibleServerMgmtScenarioTest(ScenarioTest):
                  checks=[JMESPathCheck('type(@)', 'array')])
 
         self.cmd('{} flexible-server delete -g {} -n {} --yes'.format(database_engine, resource_group, server_name), checks=NoneCheck())
-
+'''
 
 class FlexibleServerProxyResourceMgmtScenarioTest(ScenarioTest):
 
@@ -392,7 +392,7 @@ class FlexibleServerValidatorScenarioTest(ScenarioTest):
 
         self.cmd('{} flexible-server delete -g {} -n {} --yes'.format(database_engine, resource_group, server_name), checks=NoneCheck())
 
-
+'''
 class FlexibleServerReplicationMgmtScenarioTest(ScenarioTest):  # pylint: disable=too-few-public-methods
 
     mysql_location = 'southeastasia'
@@ -802,7 +802,7 @@ class FlexibleServerVnetMgmtScenarioTest(ScenarioTest):
         self.cmd('network vnet delete -g {} -n {}'.format(resource_group_1, vnet_name))
         self.cmd('network vnet delete -g {} -n {}'.format(resource_group_2, vnet_name_2))
 
-
+'''
 class FlexibleServerPublicAccessMgmtScenarioTest(ScenarioTest):
     postgres_location = 'southeastasia'
     mysql_location = 'southeastasia'
@@ -857,7 +857,7 @@ class FlexibleServerPublicAccessMgmtScenarioTest(ScenarioTest):
         self.cmd('{} flexible-server delete -g {} -n {} --yes'.format(database_engine, resource_group, servers[1]),
                  checks=NoneCheck())
 
-
+'''
 class FlexibleServerLocalContextScenarioTest(LocalContextScenarioTest):
 
     postgres_location = 'southeastasia'
@@ -907,3 +907,4 @@ class FlexibleServerLocalContextScenarioTest(LocalContextScenarioTest):
 
         self.cmd('{} flexible-server delete --yes'.format(database_engine))
         self.cmd('config param-persist off')
+'''
