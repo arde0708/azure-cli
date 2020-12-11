@@ -61,7 +61,7 @@ class ServerPreparer(AbstractPreparer, SingleValueReplacer):
     def _get_resource_group(self, **kwargs):
         return kwargs.get(self.resource_group_parameter_name)
 
-
+'''
 class FlexibleServerMgmtScenarioTest(ScenarioTest):
 
     postgres_location = 'southeastasia'
@@ -195,7 +195,7 @@ class FlexibleServerMgmtScenarioTest(ScenarioTest):
                  checks=[JMESPathCheck('type(@)', 'array')])
 
         self.cmd('{} flexible-server delete -g {} -n {} --yes'.format(database_engine, resource_group, server_name), checks=NoneCheck())
-
+'''
 
 class FlexibleServerProxyResourceMgmtScenarioTest(ScenarioTest):
 
@@ -531,7 +531,7 @@ class FlexibleServerPublicAccessMgmtScenarioTest(ScenarioTest):
         self.cmd('{} flexible-server delete -g {} -n {} --yes'.format(database_engine, resource_group, servers[1]),
                  checks=NoneCheck())
 
-
+'''
 class FlexibleServerLocalContextScenarioTest(LocalContextScenarioTest):
 
     postgres_location = 'southeastasia'
@@ -581,3 +581,4 @@ class FlexibleServerLocalContextScenarioTest(LocalContextScenarioTest):
 
         self.cmd('{} flexible-server delete --yes'.format(database_engine))
         self.cmd('config param-persist off')
+'''
