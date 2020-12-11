@@ -61,7 +61,7 @@ class ServerPreparer(AbstractPreparer, SingleValueReplacer):
     def _get_resource_group(self, **kwargs):
         return kwargs.get(self.resource_group_parameter_name)
 
-'''
+
 class FlexibleServerMgmtScenarioTest(ScenarioTest):
 
     postgres_location = 'southeastasia'
@@ -196,7 +196,7 @@ class FlexibleServerMgmtScenarioTest(ScenarioTest):
 
         self.cmd('{} flexible-server delete -g {} -n {} --yes'.format(database_engine, resource_group, server_name), checks=NoneCheck())
 
-'''
+
 class FlexibleServerProxyResourceMgmtScenarioTest(ScenarioTest):
 
     postgres_location = 'southeastasia'
@@ -390,7 +390,7 @@ class FlexibleServerValidatorScenarioTest(ScenarioTest):
         self.cmd('{} flexible-server update -g {} -n {} --backup-retention {}'.format(database_engine, resource_group, server_name, invalid_backup_retention), expect_failure=True)
 
         self.cmd('{} flexible-server delete -g {} -n {} --yes'.format(database_engine, resource_group, server_name), checks=NoneCheck())
-'''
+
 
 class FlexibleServerReplicationMgmtScenarioTest(ScenarioTest):  # pylint: disable=too-few-public-methods
 
@@ -581,4 +581,3 @@ class FlexibleServerLocalContextScenarioTest(LocalContextScenarioTest):
 
         self.cmd('{} flexible-server delete --yes'.format(database_engine))
         self.cmd('config param-persist off')
-'''
