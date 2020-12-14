@@ -391,7 +391,7 @@ class FlexibleServerValidatorScenarioTest(ScenarioTest):
 
         self.cmd('{} flexible-server delete -g {} -n {} --yes'.format(database_engine, resource_group, server_name), checks=NoneCheck())
 
-
+'''
 class FlexibleServerReplicationMgmtScenarioTest(ScenarioTest):  # pylint: disable=too-few-public-methods
 
     mysql_location = 'southeastasia'
@@ -531,7 +531,7 @@ class FlexibleServerPublicAccessMgmtScenarioTest(ScenarioTest):
         self.cmd('{} flexible-server delete -g {} -n {} --yes'.format(database_engine, resource_group, servers[1]),
                  checks=NoneCheck())
 
-'''
+
 class FlexibleServerLocalContextScenarioTest(LocalContextScenarioTest):
 
     postgres_location = 'southeastasia'
