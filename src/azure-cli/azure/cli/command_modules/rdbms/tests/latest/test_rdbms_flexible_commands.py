@@ -94,7 +94,7 @@ class FlexibleServerMgmtScenarioTest(ScenarioTest):
             storage_size = 10
             version = '5.7'
             location = self.mysql_location
-        location_result = 'Southeast Asia'
+        location_result = 'East US 2 EUAP'
 
         # flexible-server create with user input
         server_name = self.create_random_name(SERVER_NAME_PREFIX, SERVER_NAME_MAX_LENGTH)
@@ -120,9 +120,9 @@ class FlexibleServerMgmtScenarioTest(ScenarioTest):
             self.cmd('postgres flexible-server create -g {} -l {} --tier MemoryOptimized --sku-name Standard_E2s_v3 --public-access none'
                      .format(resource_group, location))
         elif database_engine == 'mysql':
-            self.cmd('mysql flexible-server create -g {} -l {} --tier GeneralPurpose --sku-name Standard_D2ds_v4 --public-access none'
+            self.cmd('mysql flexible-server create -g {} -l {} --tier GeneralPurpose --sku-name Standard_D4s_v3 --public-access none'
                      .format(resource_group, location))
-            self.cmd('mysql flexible-server create -g {} -l {} --tier MemoryOptimized --sku-name Standard_E2ds_v4 --public-access none'
+            self.cmd('mysql flexible-server create -g {} -l {} --tier MemoryOptimized --sku-name Standard_E4s_v3 --public-access none'
                      .format(resource_group, location))
 
         self.cmd('{} flexible-server show -g {} -n {}'
@@ -145,7 +145,7 @@ class FlexibleServerMgmtScenarioTest(ScenarioTest):
             sku_name = 'Standard_B1ms'
         elif database_engine == 'mysql':
             tier = 'GeneralPurpose'
-            sku_name = 'Standard_D2ds_v4'
+            sku_name = 'Standard_D2ds_v3'
 
         self.cmd('{} flexible-server update -g {} -n {} --tier {} --sku-name {}'
                  .format(database_engine, resource_group, server_name, tier, sku_name),
@@ -362,7 +362,7 @@ class FlexibleServerValidatorScenarioTest(ScenarioTest):
         elif database_engine == 'mysql':
             tier = 'GeneralPurpose'
             version = 5.7
-            sku_name = 'Standard_D2ds_v4'
+            sku_name = 'Standard_D2ds_v3'
             storage_size = 20
         storage_size_mb = storage_size * 1024
         backup_retention = 10
@@ -531,7 +531,7 @@ class FlexibleServerPublicAccessMgmtScenarioTest(ScenarioTest):
         self.cmd('{} flexible-server delete -g {} -n {} --yes'.format(database_engine, resource_group, servers[1]),
                  checks=NoneCheck())
 
-
+'''
 class FlexibleServerLocalContextScenarioTest(LocalContextScenarioTest):
 
     postgres_location = 'eastus2euap'
@@ -581,3 +581,4 @@ class FlexibleServerLocalContextScenarioTest(LocalContextScenarioTest):
 
         self.cmd('{} flexible-server delete --yes'.format(database_engine))
         self.cmd('config param-persist off')
+'''
