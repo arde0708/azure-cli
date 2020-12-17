@@ -61,11 +61,11 @@ class ServerPreparer(AbstractPreparer, SingleValueReplacer):
     def _get_resource_group(self, **kwargs):
         return kwargs.get(self.resource_group_parameter_name)
 
-'''
+
 class FlexibleServerMgmtScenarioTest(ScenarioTest):
 
-    postgres_location = 'southeastasia'
-    mysql_location = 'southeastasia'
+    postgres_location = 'eastus2euap'
+    mysql_location = 'eastus2euap'
 
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=postgres_location)
@@ -195,12 +195,12 @@ class FlexibleServerMgmtScenarioTest(ScenarioTest):
                  checks=[JMESPathCheck('type(@)', 'array')])
 
         self.cmd('{} flexible-server delete -g {} -n {} --yes'.format(database_engine, resource_group, server_name), checks=NoneCheck())
-'''
+
 
 class FlexibleServerProxyResourceMgmtScenarioTest(ScenarioTest):
 
-    postgres_location = 'southeastasia'
-    mysql_location = 'southeastasia'
+    postgres_location = 'eastus2euap'
+    mysql_location = 'eastus2euap'
 
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=postgres_location)
@@ -312,8 +312,8 @@ class FlexibleServerProxyResourceMgmtScenarioTest(ScenarioTest):
 
 class FlexibleServerValidatorScenarioTest(ScenarioTest):
 
-    postgres_location = 'southeastasia'
-    mysql_location = 'southeastasia'
+    postgres_location = 'eastus2euap'
+    mysql_location = 'eastus2euap'
 
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=postgres_location)
@@ -394,7 +394,7 @@ class FlexibleServerValidatorScenarioTest(ScenarioTest):
 
 class FlexibleServerReplicationMgmtScenarioTest(ScenarioTest):  # pylint: disable=too-few-public-methods
 
-    mysql_location = 'southeastasia'
+    mysql_location = 'eastus2euap'
 
     @ResourceGroupPreparer(location=mysql_location)
     def test_mysql_flexible_server_replica_mgmt(self, resource_group):
@@ -478,8 +478,8 @@ class FlexibleServerReplicationMgmtScenarioTest(ScenarioTest):  # pylint: disabl
 
 
 class FlexibleServerPublicAccessMgmtScenarioTest(ScenarioTest):
-    postgres_location = 'southeastasia'
-    mysql_location = 'southeastasia'
+    postgres_location = 'eastus2euap'
+    mysql_location = 'eastus2euap'
 
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=postgres_location)
@@ -534,8 +534,8 @@ class FlexibleServerPublicAccessMgmtScenarioTest(ScenarioTest):
 
 class FlexibleServerLocalContextScenarioTest(LocalContextScenarioTest):
 
-    postgres_location = 'southeastasia'
-    mysql_location = 'southeastasia'
+    postgres_location = 'eastus2euap'
+    mysql_location = 'eastus2euap'
 
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=postgres_location)
