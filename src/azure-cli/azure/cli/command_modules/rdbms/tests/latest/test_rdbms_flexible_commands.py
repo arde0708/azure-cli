@@ -64,8 +64,8 @@ class ServerPreparer(AbstractPreparer, SingleValueReplacer):
 
 class FlexibleServerMgmtScenarioTest(ScenarioTest):
 
-    postgres_location = 'eastus2euap'
-    mysql_location = 'eastus2euap'
+    postgres_location = 'eastus'
+    mysql_location = 'westus2'
 
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=postgres_location)
@@ -94,7 +94,7 @@ class FlexibleServerMgmtScenarioTest(ScenarioTest):
             storage_size = 10
             version = '5.7'
             location = self.mysql_location
-        location_result = 'East US 2 EUAP'
+        #location_result = 'East US 2 EUAP'
 
         # flexible-server create with user input
         server_name = self.create_random_name(SERVER_NAME_PREFIX, SERVER_NAME_MAX_LENGTH)
@@ -102,7 +102,7 @@ class FlexibleServerMgmtScenarioTest(ScenarioTest):
         backup_retention = 7
 
         list_checks = [JMESPathCheck('name', server_name),
-                       JMESPathCheck('location', location_result),
+                       #JMESPathCheck('location', location_result),
                        JMESPathCheck('resourceGroup', resource_group),
                        JMESPathCheck('sku.name', sku_name),
                        JMESPathCheck('sku.tier', tier),
@@ -120,9 +120,9 @@ class FlexibleServerMgmtScenarioTest(ScenarioTest):
             self.cmd('postgres flexible-server create -g {} -l {} --tier MemoryOptimized --sku-name Standard_E2s_v3 --public-access none'
                      .format(resource_group, location))
         elif database_engine == 'mysql':
-            self.cmd('mysql flexible-server create -g {} -l {} --tier GeneralPurpose --sku-name Standard_D4s_v3 --public-access none'
+            self.cmd('mysql flexible-server create -g {} -l {} --tier GeneralPurpose --sku-name Standard_D2ds_v4 --public-access none'
                      .format(resource_group, location))
-            self.cmd('mysql flexible-server create -g {} -l {} --tier MemoryOptimized --sku-name Standard_E4s_v3 --public-access none'
+            self.cmd('mysql flexible-server create -g {} -l {} --tier MemoryOptimized --sku-name Standard_E2ds_v4 --public-access none'
                      .format(resource_group, location))
 
         self.cmd('{} flexible-server show -g {} -n {}'
@@ -145,7 +145,7 @@ class FlexibleServerMgmtScenarioTest(ScenarioTest):
             sku_name = 'Standard_B1ms'
         elif database_engine == 'mysql':
             tier = 'GeneralPurpose'
-            sku_name = 'Standard_D2s_v3'
+            sku_name = 'Standard_D2ds_v4'
 
         self.cmd('{} flexible-server update -g {} -n {} --tier {} --sku-name {}'
                  .format(database_engine, resource_group, server_name, tier, sku_name),
@@ -199,8 +199,8 @@ class FlexibleServerMgmtScenarioTest(ScenarioTest):
 
 class FlexibleServerProxyResourceMgmtScenarioTest(ScenarioTest):
 
-    postgres_location = 'eastus2euap'
-    mysql_location = 'eastus2euap'
+    postgres_location = 'eastus'
+    mysql_location = 'westus2'
 
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=postgres_location)
@@ -312,8 +312,8 @@ class FlexibleServerProxyResourceMgmtScenarioTest(ScenarioTest):
 
 class FlexibleServerValidatorScenarioTest(ScenarioTest):
 
-    postgres_location = 'eastus2euap'
-    mysql_location = 'eastus2euap'
+    postgres_location = 'eastus'
+    mysql_location = 'westus2'
 
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=postgres_location)
@@ -362,7 +362,7 @@ class FlexibleServerValidatorScenarioTest(ScenarioTest):
         elif database_engine == 'mysql':
             tier = 'GeneralPurpose'
             version = 5.7
-            sku_name = 'Standard_D2s_v3'
+            sku_name = 'Standard_D2ds_v4'
             storage_size = 20
         storage_size_mb = storage_size * 1024
         backup_retention = 10
@@ -394,7 +394,7 @@ class FlexibleServerValidatorScenarioTest(ScenarioTest):
 
 class FlexibleServerReplicationMgmtScenarioTest(ScenarioTest):  # pylint: disable=too-few-public-methods
 
-    mysql_location = 'eastus2euap'
+    mysql_location = 'westus2'
 
     @ResourceGroupPreparer(location=mysql_location)
     def test_mysql_flexible_server_replica_mgmt(self, resource_group):
@@ -479,8 +479,8 @@ class FlexibleServerReplicationMgmtScenarioTest(ScenarioTest):  # pylint: disabl
 
 
 class FlexibleServerPublicAccessMgmtScenarioTest(ScenarioTest):
-    postgres_location = 'eastus2euap'
-    mysql_location = 'eastus2euap'
+    postgres_location = 'eastus'
+    mysql_location = 'westus2'
 
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=postgres_location)
@@ -532,11 +532,11 @@ class FlexibleServerPublicAccessMgmtScenarioTest(ScenarioTest):
         self.cmd('{} flexible-server delete -g {} -n {} --yes'.format(database_engine, resource_group, servers[1]),
                  checks=NoneCheck())
 
-'''
+
 class FlexibleServerLocalContextScenarioTest(LocalContextScenarioTest):
 
-    postgres_location = 'eastus2euap'
-    mysql_location = 'eastus2euap'
+    postgres_location = 'eastus'
+    mysql_location = 'westus2'
 
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=postgres_location)
@@ -582,4 +582,3 @@ class FlexibleServerLocalContextScenarioTest(LocalContextScenarioTest):
 
         self.cmd('{} flexible-server delete --yes'.format(database_engine))
         self.cmd('config param-persist off')
-'''
