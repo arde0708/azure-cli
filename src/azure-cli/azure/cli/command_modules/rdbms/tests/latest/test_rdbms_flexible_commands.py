@@ -145,7 +145,7 @@ class FlexibleServerMgmtScenarioTest(ScenarioTest):
             sku_name = 'Standard_B1ms'
         elif database_engine == 'mysql':
             tier = 'GeneralPurpose'
-            sku_name = 'Standard_D2ds_v3'
+            sku_name = 'Standard_D2s_v3'
 
         self.cmd('{} flexible-server update -g {} -n {} --tier {} --sku-name {}'
                  .format(database_engine, resource_group, server_name, tier, sku_name),
@@ -362,7 +362,7 @@ class FlexibleServerValidatorScenarioTest(ScenarioTest):
         elif database_engine == 'mysql':
             tier = 'GeneralPurpose'
             version = 5.7
-            sku_name = 'Standard_D2ds_v3'
+            sku_name = 'Standard_D2s_v3'
             storage_size = 20
         storage_size_mb = storage_size * 1024
         backup_retention = 10
@@ -412,6 +412,7 @@ class FlexibleServerReplicationMgmtScenarioTest(ScenarioTest):  # pylint: disabl
         result = self.cmd('{} flexible-server show -g {} --name {} '
                           .format(database_engine, resource_group, master_server),
                           checks=[JMESPathCheck('replicationRole', 'None')]).get_output_in_json()
+        time.sleep(5 * 60)
 
         # test replica create
         self.cmd('{} flexible-server replica create -g {} --replica-name {} --source-server {}'
@@ -531,7 +532,7 @@ class FlexibleServerPublicAccessMgmtScenarioTest(ScenarioTest):
         self.cmd('{} flexible-server delete -g {} -n {} --yes'.format(database_engine, resource_group, servers[1]),
                  checks=NoneCheck())
 
-'''
+
 class FlexibleServerLocalContextScenarioTest(LocalContextScenarioTest):
 
     postgres_location = 'eastus2euap'
@@ -581,4 +582,3 @@ class FlexibleServerLocalContextScenarioTest(LocalContextScenarioTest):
 
         self.cmd('{} flexible-server delete --yes'.format(database_engine))
         self.cmd('config param-persist off')
-'''
