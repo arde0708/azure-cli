@@ -20,7 +20,7 @@ SERVER_NAME_MAX_LENGTH = 20
 class FlexibleServerLocalContextScenarioTest(LocalContextScenarioTest):
 
     postgres_location = 'eastus2euap'
-    mysql_location = 'westus2'
+    mysql_location = 'eastus2euap'
 
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=postgres_location)
