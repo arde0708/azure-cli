@@ -53,11 +53,11 @@ class FlexibleServerLocalContextScenarioTest(LocalContextScenarioTest):
         self.cmd('{} flexible-server update --backup-retention {}'
                  .format(database_engine, 10))
 
+        self.cmd('{} flexible-server restart'.format(database_engine))
+
         self.cmd('{} flexible-server stop'.format(database_engine))
 
         self.cmd('{} flexible-server start'.format(database_engine))
-
-        self.cmd('{} flexible-server restart'.format(database_engine))
 
         self.cmd('{} flexible-server list'.format(database_engine))
 
