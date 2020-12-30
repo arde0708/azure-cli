@@ -6,7 +6,6 @@
 # pylint: disable=unused-argument, line-too-long
 
 from msrestazure.tools import is_valid_resource_id, parse_resource_id  # pylint: disable=import-error
-from msrestazure.azure_exceptions import CloudError
 from knack.log import get_logger
 from azure.cli.core.profiles import ResourceType
 from azure.cli.core.commands.client_factory import get_subscription_id
@@ -162,6 +161,7 @@ def check_resource_existence(cmd, subnet_name, vnet_name, resource_group_name, )
 
 def _create_vnet_subnet_delegation(nw_client, resource_group, vnet_name, subnet_name, location, server_name, delegation,
                                    VirtualNetwork, Subnet, AddressSpace, vnet_address_pref, subnet_address_pref):
+    from azure.core.exceptions import HttpResponseError
     try:
         vnet_exist = _get_resource(nw_client.virtual_networks, resource_group, vnet_name)
         if not vnet_exist:
@@ -180,19 +180,20 @@ def _create_vnet_subnet_delegation(nw_client, resource_group, vnet_name, subnet_
 
         logger.info('Creating new subnet "%s" in resource group "%s"', subnet_name, resource_group)
         return nw_client.subnets.begin_create_or_update(resource_group, vnet_name, subnet_name, subnet_result).result()
-    except CloudError as err:
-        if err.error.error == 'NetcfgInvalidSubnet':
+    except HttpResponseError as err:
+        if err.error.code == 'NetcfgInvalidSubnet':
             raise CLIError('Cannot add the subnet {} to the vnet {}.The subnet address space exceeds'
                            ' the available vnet address space.'.format(subnet_name, vnet_name))
         raise
 
 
 def _get_resource(client, resource_group_name, *subresources):
+    from azure.core.exceptions import HttpResponseError
     try:
         resource = client.get(resource_group_name, *subresources)
         return resource
-    except CloudError as ex:
-        if ex.error.error == "NotFound" or ex.error.error == "ResourceNotFound":
+    except HttpResponseError as ex:
+        if ex.error.code == "NotFound" or ex.error.code == "ResourceNotFound":
             return None
         raise
 
