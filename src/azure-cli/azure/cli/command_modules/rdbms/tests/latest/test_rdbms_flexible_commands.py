@@ -62,7 +62,7 @@ class ServerPreparer(AbstractPreparer, SingleValueReplacer):
     def _get_resource_group(self, **kwargs):
         return kwargs.get(self.resource_group_parameter_name)
 
-
+'''
 class FlexibleServerMgmtScenarioTest(ScenarioTest):
 
     postgres_location = 'eastus2euap'
@@ -309,7 +309,7 @@ class FlexibleServerProxyResourceMgmtScenarioTest(ScenarioTest):
 
         self.cmd('{} flexible-server db delete -g {} -s {} -d {} --yes'.format(database_engine, resource_group, server, database_name),
                  checks=NoneCheck())
-
+'''
 
 class FlexibleServerValidatorScenarioTest(ScenarioTest):
 
@@ -320,12 +320,12 @@ class FlexibleServerValidatorScenarioTest(ScenarioTest):
     @ResourceGroupPreparer(location=postgres_location)
     def test_postgres_flexible_server_mgmt_validator(self, resource_group):
         self._test_mgmt_validator('postgres', resource_group)
-
+    '''
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=mysql_location)
     def test_mysql_flexible_server_mgmt_validator(self, resource_group):
         self._test_mgmt_validator('mysql', resource_group)
-
+    '''
     def _test_mgmt_validator(self, database_engine, resource_group):
 
         RANDOM_VARIABLE_MAX_LENGTH = 30
@@ -392,7 +392,7 @@ class FlexibleServerValidatorScenarioTest(ScenarioTest):
 
         self.cmd('{} flexible-server delete -g {} -n {} --yes'.format(database_engine, resource_group, server_name), checks=NoneCheck())
 
-
+'''
 class FlexibleServerReplicationMgmtScenarioTest(ScenarioTest):  # pylint: disable=too-few-public-methods
 
     mysql_location = 'eastus2euap'
@@ -858,7 +858,7 @@ class FlexibleServerPublicAccessMgmtScenarioTest(ScenarioTest):
 
         self.cmd('{} flexible-server delete -g {} -n {} --yes'.format(database_engine, resource_group, servers[1]),
                  checks=NoneCheck())
-
+'''
 
 '''
 class FlexibleServerLocalContextScenarioTest(LocalContextScenarioTest):
