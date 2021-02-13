@@ -65,8 +65,8 @@ class ServerPreparer(AbstractPreparer, SingleValueReplacer):
 
 class FlexibleServerMgmtScenarioTest(ScenarioTest):
 
-    postgres_location = 'eastus2euap'
-    mysql_location = 'eastus2euap'
+    postgres_location = 'southeastasia'
+    mysql_location = 'southeastasia'
 
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=mysql_location)
@@ -268,8 +268,8 @@ class FlexibleServerMgmtScenarioTest(ScenarioTest):
 
 class FlexibleServerProxyResourceMgmtScenarioTest(ScenarioTest):
 
-    postgres_location = 'eastus2euap'
-    mysql_location = 'eastus2euap'
+    postgres_location = 'southeastasia'
+    mysql_location = 'southeastasia'
 
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=postgres_location)
@@ -381,8 +381,8 @@ class FlexibleServerProxyResourceMgmtScenarioTest(ScenarioTest):
 
 class FlexibleServerValidatorScenarioTest(ScenarioTest):
 
-    postgres_location = 'eastus2euap'
-    mysql_location = 'eastus2euap'
+    postgres_location = 'southeastasia'
+    mysql_location = 'southeastasia'
 
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=postgres_location)
@@ -463,7 +463,7 @@ class FlexibleServerValidatorScenarioTest(ScenarioTest):
 
 class FlexibleServerReplicationMgmtScenarioTest(ScenarioTest):  # pylint: disable=too-few-public-methods
 
-    mysql_location = 'eastus2euap'
+    mysql_location = 'southeastasia'
 
     @ResourceGroupPreparer(location=mysql_location)
     def test_mysql_flexible_server_replica_mgmt(self, resource_group):
@@ -549,8 +549,8 @@ class FlexibleServerReplicationMgmtScenarioTest(ScenarioTest):  # pylint: disabl
 
 class FlexibleServerVnetMgmtScenarioTest(ScenarioTest):
 
-    postgres_location = 'eastus2euap'
-    mysql_location = 'eastus2euap'
+    postgres_location = 'southeastasia'
+    mysql_location = 'southeastasia'
 
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=mysql_location)
@@ -874,8 +874,8 @@ class FlexibleServerVnetMgmtScenarioTest(ScenarioTest):
 
 
 class FlexibleServerPublicAccessMgmtScenarioTest(ScenarioTest):
-    postgres_location = 'eastus2euap'
-    mysql_location = 'eastus2euap'
+    postgres_location = 'southeastasia'
+    mysql_location = 'southeastasia'
 
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=postgres_location)
