@@ -28,11 +28,13 @@ class FlexibleServerLocalContextScenarioTest(LocalContextScenarioTest):
     def test_postgres_flexible_server_local_context(self, resource_group):
         self._test_flexible_server_local_context('postgres', resource_group)
 
+    '''
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=mysql_location)
     def test_mysql_flexible_server_local_context(self, resource_group):
         self._test_flexible_server_local_context('mysql', resource_group)
 
+    '''
     def _test_flexible_server_local_context(self, database_engine, resource_group):
         self.cmd('config param-persist on')
         if database_engine == 'mysql':

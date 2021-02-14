@@ -67,24 +67,25 @@ class FlexibleServerMgmtScenarioTest(ScenarioTest):
 
     postgres_location = 'southeastasia'
     mysql_location = 'southeastasia'
-
+    '''
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=mysql_location)
     def test_mysql_flexible_server_iops_mgmt(self, resource_group):
         self._test_flexible_server_iops_mgmt('mysql', resource_group)
-
+    '''
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=postgres_location)
     @ServerPreparer(engine_type='postgres', location=postgres_location)
     def test_postgres_flexible_server_mgmt(self, resource_group, server):
         self._test_flexible_server_mgmt('postgres', resource_group, server)
 
+    '''
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=mysql_location)
     @ServerPreparer(engine_type='mysql', location=mysql_location)
     def test_mysql_flexible_server_mgmt(self, resource_group, server):
         self._test_flexible_server_mgmt('mysql', resource_group, server)
-
+    '''
     def _test_flexible_server_mgmt(self, database_engine, resource_group, server_name):
 
         if self.cli_ctx.local_context.is_on:
@@ -278,6 +279,7 @@ class FlexibleServerProxyResourceMgmtScenarioTest(ScenarioTest):
         self._test_firewall_rule_mgmt('postgres', resource_group, server)
         self._test_parameter_mgmt('postgres', resource_group, server)
 
+    '''
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=mysql_location)
     @ServerPreparer(engine_type='mysql', location=mysql_location)
@@ -285,7 +287,7 @@ class FlexibleServerProxyResourceMgmtScenarioTest(ScenarioTest):
         self._test_firewall_rule_mgmt('mysql', resource_group, server)
         self._test_parameter_mgmt('mysql', resource_group, server)
         self._test_database_mgmt('mysql', resource_group, server)
-
+    '''
     def _test_firewall_rule_mgmt(self, database_engine, resource_group, server):
 
         firewall_rule_name = 'firewall_test_rule'
@@ -389,11 +391,12 @@ class FlexibleServerValidatorScenarioTest(ScenarioTest):
     def test_postgres_flexible_server_mgmt_validator(self, resource_group):
         self._test_mgmt_validator('postgres', resource_group)
 
+    '''
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=mysql_location)
     def test_mysql_flexible_server_mgmt_validator(self, resource_group):
         self._test_mgmt_validator('mysql', resource_group)
-
+    '''
     def _test_mgmt_validator(self, database_engine, resource_group):
 
         RANDOM_VARIABLE_MAX_LENGTH = 30
@@ -460,11 +463,12 @@ class FlexibleServerValidatorScenarioTest(ScenarioTest):
 
         self.cmd('{} flexible-server delete -g {} -n {} --yes'.format(database_engine, resource_group, server_name), checks=NoneCheck())
 
-
+'''
 class FlexibleServerReplicationMgmtScenarioTest(ScenarioTest):  # pylint: disable=too-few-public-methods
 
     mysql_location = 'southeastasia'
 
+    
     @ResourceGroupPreparer(location=mysql_location)
     def test_mysql_flexible_server_replica_mgmt(self, resource_group):
         self._test_flexible_server_replica_mgmt('mysql', resource_group)
@@ -545,13 +549,13 @@ class FlexibleServerReplicationMgmtScenarioTest(ScenarioTest):  # pylint: disabl
                  .format(database_engine, resource_group, replicas[0]), checks=NoneCheck())
         self.cmd('{} flexible-server delete -g {} --name {} --yes'
                  .format(database_engine, resource_group, replicas[1]), checks=NoneCheck())
-
+'''
 
 class FlexibleServerVnetMgmtScenarioTest(ScenarioTest):
 
     postgres_location = 'southeastasia'
     mysql_location = 'southeastasia'
-
+    '''
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=mysql_location)
     @VirtualNetworkPreparer(location=mysql_location)
@@ -560,7 +564,7 @@ class FlexibleServerVnetMgmtScenarioTest(ScenarioTest):
         self._test_flexible_server_vnet_mgmt_existing_supplied_subnetid('mysql', resource_group)
         # Provision a server with supplied Subnet ID whose vnet exists, but subnet does not exist and the vnet does not contain any other subnet
         self._test_flexible_server_vnet_mgmt_non_existing_supplied_subnetid('mysql', resource_group)
-
+    '''
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=postgres_location)
     @VirtualNetworkPreparer(location=postgres_location)
@@ -575,35 +579,38 @@ class FlexibleServerVnetMgmtScenarioTest(ScenarioTest):
     def test_postgres_flexible_server_vnet_mgmt_supplied_vnet(self, resource_group):
         self._test_flexible_server_vnet_mgmt_supplied_vnet('postgres', resource_group)
 
+    '''
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=mysql_location)
     def test_mysql_flexible_server_vnet_mgmt_supplied_vnet(self, resource_group):
         self._test_flexible_server_vnet_mgmt_supplied_vnet('mysql', resource_group)
-
+    '''
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=postgres_location)
     @VirtualNetworkPreparer(parameter_name='virtual_network', location=postgres_location)
     def test_postgres_flexible_server_vnet_mgmt_supplied_vname_and_subnetname(self, resource_group, virtual_network):
         self._test_flexible_server_vnet_mgmt_supplied_vname_and_subnetname('postgres', resource_group, virtual_network)
 
+    '''
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=mysql_location)
     @VirtualNetworkPreparer(parameter_name='virtual_network', location=mysql_location)
     def test_mysql_flexible_server_vnet_mgmt_supplied_vname_and_subnetname(self, resource_group, virtual_network):
         self._test_flexible_server_vnet_mgmt_supplied_vname_and_subnetname('mysql', resource_group, virtual_network)
-
+    '''
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=postgres_location, parameter_name='resource_group_1')
     @ResourceGroupPreparer(location=postgres_location, parameter_name='resource_group_2')
     def test_postgres_flexible_server_vnet_mgmt_supplied_subnet_id_in_different_rg(self, resource_group_1, resource_group_2):
         self._test_flexible_server_vnet_mgmt_supplied_subnet_id_in_different_rg('postgres', resource_group_1, resource_group_2)
 
+    '''
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=mysql_location, parameter_name='resource_group_1')
     @ResourceGroupPreparer(location=mysql_location, parameter_name='resource_group_2')
     def test_mysql_flexible_server_vnet_mgmt_supplied_subnet_id_in_different_rg(self, resource_group_1, resource_group_2):
         self._test_flexible_server_vnet_mgmt_supplied_subnet_id_in_different_rg('mysql', resource_group_1, resource_group_2)
-
+    '''
     def _test_flexible_server_vnet_mgmt_existing_supplied_subnetid(self, database_engine, resource_group):
 
         # flexible-server create
@@ -883,12 +890,13 @@ class FlexibleServerPublicAccessMgmtScenarioTest(ScenarioTest):
     def test_postgres_flexible_server_public_access_mgmt(self, resource_group):
         self._test_flexible_server_public_access_mgmt('postgres', resource_group)
 
+    '''
     @AllowLargeResponse()
     @ResourceGroupPreparer(location=mysql_location)
     @live_only()
     def test_mysql_flexible_server_public_access_mgmt(self, resource_group):
         self._test_flexible_server_public_access_mgmt('mysql', resource_group)
-
+    '''
     def _test_flexible_server_public_access_mgmt(self, database_engine, resource_group):
         # flexible-server create
         if self.cli_ctx.local_context.is_on:
