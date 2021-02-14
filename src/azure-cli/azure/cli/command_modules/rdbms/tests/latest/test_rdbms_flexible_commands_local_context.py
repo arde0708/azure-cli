@@ -51,7 +51,7 @@ class FlexibleServerLocalContextScenarioTest(LocalContextScenarioTest):
 
         self.cmd('{} flexible-server show'.format(database_engine),
                  checks=[JMESPathCheck('resourceGroup', local_context_info['all']['resource_group_name']),
-                         JMESPathCheck('location', 'East US 2 EUAP'),
+                         JMESPathCheck('location', 'Southeast Asia'),
                          JMESPathCheck('name', local_context_info[database_engine + ' flexible-server']['server_name']),
                          JMESPathCheck('administratorLogin', local_context_info[database_engine + ' flexible-server']['administrator_login'])])
 

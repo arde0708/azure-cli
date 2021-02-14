@@ -102,7 +102,7 @@ class FlexibleServerMgmtScenarioTest(ScenarioTest):
             storage_size = 10
             version = '5.7'
             location = self.mysql_location
-        location_result = 'East US 2 EUAP'
+        location_result = 'Southeast Asia'
 
         # flexible-server create with user input
         random_name = self.create_random_name(SERVER_NAME_PREFIX, SERVER_NAME_MAX_LENGTH)
